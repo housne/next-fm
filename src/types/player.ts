@@ -1,0 +1,1 @@
+export type PlayState = 'not_started' | 'playing' | 'paused' | 'loading' | 'error'
