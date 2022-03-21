@@ -36,8 +36,7 @@
     "reflect-metadata": "^0.1.13",
     "sass": "^1.49.9",
     "spinners-react": "^1.0.6",
-    "zod": "^3.13.4",
-    "zod-prisma": "^0.5.4"
+    "zod": "^3.13.4"
   },
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.0",
