@@ -1,7 +1,6 @@
-import { PrismaClient, Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { CreateRadioScheme } from '../../scheme/create-radio'
-
-const prisma = new PrismaClient()
+import { prisma } from '../prisma'
 
 export async function getRadio(id: number) {
   return await prisma.radio.findUnique({ 

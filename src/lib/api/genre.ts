@@ -1,7 +1,6 @@
 import { Prisma } from '@prisma/client'
 import { prisma } from '../prisma'
 
-
 export async function createGenre(name: string) {
   return prisma.genre.create({
     data: {

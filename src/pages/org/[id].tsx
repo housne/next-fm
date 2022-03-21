@@ -7,9 +7,9 @@ import { getOrgById, listAllOrg, listRadios } from '../../lib/api'
 import type { Organization, Radio } from '../../types/radio'
 
 type OrganizationPageProps = {
-  org: Organization
-  radios: Radio[]
-  featuredRadios: Radio[]
+  org?: Organization
+  radios?: Radio[]
+  featuredRadios?: Radio[]
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -39,6 +39,9 @@ export const getStaticProps: GetStaticProps<OrganizationPageProps> = async ({par
 }
 
 const OrganizationPage: NextPage<OrganizationPageProps> = ({ featuredRadios, radios, org }) => {
+  if (!org || !featuredRadios || !radios) {
+    return null
+  }
   return (
     <div className="px-12 py-4">
       <Head>

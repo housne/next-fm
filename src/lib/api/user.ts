@@ -1,12 +1,12 @@
-import { PrismaClient, Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { RegisterData } from '../../scheme/user'
 import { compare, hash } from '../crypto'
 import { deta } from '../deta'
 import { sendRegisterMail } from '../mail'
+import { prisma } from '../prisma'
 
 const userRegisterDeta = deta.Base(`${process.env.NODE_ENV}_fm_user_veri`)
 
-const prisma = new PrismaClient()
 
 export async function userRegister(data: RegisterData) {
   const hashStr = await hash(data.password)

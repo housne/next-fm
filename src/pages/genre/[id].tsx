@@ -7,9 +7,9 @@ import { getGenreById, listAllGenre, getRadiosByGenre } from '../../lib/api'
 import type { Genre, Radio } from '../../types/radio'
 
 type GenrePageProps = {
-  genre: Genre
-  radios: Radio[]
-  featuredRadios: Radio[]
+  genre?: Genre
+  radios?: Radio[]
+  featuredRadios?: Radio[]
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -39,6 +39,9 @@ export const getStaticProps: GetStaticProps<GenrePageProps> = async ({params}) =
 }
 
 const GenrePage: NextPage<GenrePageProps> = ({ featuredRadios, radios, genre }) => {
+  if (!genre || !featuredRadios || !radios) {
+    return null
+  }
   return (
     <div className="px-12 py-4">
       <Head>
