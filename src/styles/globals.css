@@ -18,3 +18,11 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.rc-slider {
+  height: auto !important;
+}
+
+.rc-slider-handle:active {
+  box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.5) !important;
+}

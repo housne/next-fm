@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Radio" ALTER COLUMN "is_featured" DROP NOT NULL,
+ALTER COLUMN "is_hls" DROP NOT NULL;

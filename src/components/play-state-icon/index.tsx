@@ -4,7 +4,7 @@ import { MdPlayArrow, MdPause } from 'react-icons/md'
 import { SpinnerComponent, SpinnerComponentProps } from "../spinner";
 import cx from 'classnames'
 
-type PlayStateIconProps = {
+export type PlayStateIconProps = {
   state: PlayState
   classNames?: {
     loading?: string

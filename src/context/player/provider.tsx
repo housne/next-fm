@@ -1,5 +1,5 @@
 import { FunctionComponent, PropsWithChildren, useCallback, useEffect, useRef, useState } from "react";
-import { Radio } from "../../lib/source";
+import { Radio } from "../../types/radio";
 import { PlayerProviderContext } from "./context";
 import Hls from 'hls.js'
 import { PlayState } from "../../types/player";
@@ -8,7 +8,7 @@ import { LoopMode, PlayerComponent } from "./components/player";
 export const PlayerProvider: FunctionComponent<PropsWithChildren<{}>> = ({ children }) => {
 
   const audioRef = useRef<HTMLAudioElement>()
-  const lastPlayedRadio = useRef<Radio>()
+  const lastPlayedRadioRef = useRef<Radio>()
   const [playlist, setPlaylist] = useState<Radio[]>([])
   const [playState, setPlayState] = useState<PlayState>('not_started')
   const randomRef = useRef(false)
@@ -42,6 +42,18 @@ export const PlayerProvider: FunctionComponent<PropsWithChildren<{}>> = ({ child
     }
   }, [])
 
+  const addToPlayList = useCallback((radio: Radio, prepend = false) => {
+    setPlaylist(list => {
+      if (list.find(l => l.id === radio.id)) {
+        return list
+      }
+      if (prepend) {
+        return [radio].concat(list)
+      }
+      return list.concat(radio)
+    })
+  }, [])
+
   const play = useCallback((radio?: Radio) => {
     const audio = audioRef.current
     if (!audio) {
@@ -51,19 +63,20 @@ export const PlayerProvider: FunctionComponent<PropsWithChildren<{}>> = ({ child
     if (!radio) {
       return audio.play()
     }
-    if (lastPlayedRadio.current?.slug === radio.slug) {
+    if (lastPlayedRadioRef.current?.id === radio.id) {
       return audio.play()
     }
-    if (lastPlayedRadio.current?.hls) {
+    if (lastPlayedRadioRef.current?.is_hls) {
       hlsRef.current && hlsRef.current.destroy()
     }
-    if (!radio.hls) {
+    if (!radio.is_hls) {
       audio.src = radio.stream_url
     }
-    lastPlayedRadio.current = radio
+    lastPlayedRadioRef.current = radio
     setPlayingRadio(radio)
+    addToPlayList(radio, true)
     audio.load()
-    if (!radio.hls) {
+    if (!radio.is_hls) {
       return audio.play()
     }
     return new Promise<void>((resolve, reject) => {
@@ -74,7 +87,7 @@ export const PlayerProvider: FunctionComponent<PropsWithChildren<{}>> = ({ child
         audio.play().then(resolve).catch(reject)
       })
     })
-  }, [])
+  }, [addToPlayList])
 
   const pause = useCallback(() => {
     const audio = audioRef.current
@@ -84,12 +97,12 @@ export const PlayerProvider: FunctionComponent<PropsWithChildren<{}>> = ({ child
     audio.pause()
   }, [])
 
-  const getPlayState = useCallback<(radio: Radio) => PlayState>((radio: Radio) => {
+  const getPlayState = useCallback<(radio?: Radio) => PlayState>((radio?: Radio) => {
     const audio = audioRef.current
-    if (!audio) {
+    if (!audio || !radio) {
       return 'not_started'
     }
-    if (playingRadio?.slug !== radio.slug) {
+    if (playingRadio?.id !== radio.id) {
       return 'not_started'
     }
     return playState
@@ -103,8 +116,84 @@ export const PlayerProvider: FunctionComponent<PropsWithChildren<{}>> = ({ child
   
   const onLoopModeChange = (loopMode: LoopMode) => loopModeRef.current = loopMode
 
+  const removeItemFromPlaylist = useCallback((radio: Radio) => {
+    setPlaylist(list => list.filter(r => r.id !== radio.id))
+  }, [])
+
+  const clearPlaylist = useCallback(() => {
+    setPlaylist(list => list.filter(r => r.id === lastPlayedRadioRef.current?.id))
+  }, [])
+
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio) {
+      return
+    }
+    const nextHandle = () => {
+      const loopMode = loopModeRef.current
+      const random = randomRef.current
+      const lastPlayedRadio = lastPlayedRadioRef.current
+      const currentPlayIndex = !lastPlayedRadio ? -1 : playlist.findIndex(r => r.id === lastPlayedRadio.id)
+      const isLastRadio = currentPlayIndex === playlist.length - 1
+      if (loopMode === 'one') {
+        const audio = audioRef.current
+        if (!audio) {
+          return Promise.reject()
+        }
+        audio.load()
+        play()
+      } else if (random) {
+        const randomIndex = Math.ceil(Math.random() * playlist.length)
+        const randomRadio = playlist[randomIndex]
+        play(randomRadio)
+      } else if (loopMode === 'list' && isLastRadio) {
+        play(playlist[0])
+      } else {
+        if (isLastRadio) {
+          return
+        }
+        play(playlist[currentPlayIndex + 1])
+      }
+    }
+    audio.addEventListener('ended', nextHandle)
+
+    return () => {
+      audio.removeEventListener('ended', nextHandle)
+    }
+  }, [play, playlist])
+
+  useEffect(() => {
+    const playlistFromLocal = localStorage.getItem('playlist')
+    if (!playlistFromLocal) {
+      return
+    }
+    try {
+      const playlist = JSON.parse(playlistFromLocal)
+      setPlaylist(playlist)
+    } catch (e) {}
+  }, [])
+
+  useEffect(() => {
+    const radioFromLocal = localStorage.getItem('playingRadio')
+    if (!radioFromLocal) {
+      return
+    }
+    try {
+      const radio = JSON.parse(radioFromLocal)
+      setPlayingRadio(radio)
+    } catch (e) {}
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('playlist', JSON.stringify(playlist))
+  }, [playlist])
+
+  useEffect(() => {
+    localStorage.setItem('playingRadio', JSON.stringify(playingRadio))
+  }, [playingRadio])
+
   return (
-    <PlayerProviderContext.Provider value={{ play, pause, getPlayState }}>
+    <PlayerProviderContext.Provider value={{ play, pause, getPlayState, audio: audioRef.current, addToPlayList }}>
       { children }
       <PlayerComponent 
         playlist={playlist} 
@@ -116,6 +205,8 @@ export const PlayerProvider: FunctionComponent<PropsWithChildren<{}>> = ({ child
         onPrev={onPrev}
         onLoopModeChange={onLoopModeChange}
         onRandomChange={onRandomChange}
+        removeItemFromPlaylist={removeItemFromPlaylist}
+        clearPlaylist={clearPlaylist}
       />
     </PlayerProviderContext.Provider>
   )

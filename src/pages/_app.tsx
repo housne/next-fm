@@ -1,4 +1,5 @@
 import '../styles/globals.css'
+import 'rc-slider/assets/index.css'
 import type { AppProps } from 'next/app'
 import { NavComponent } from '../components/nav'
 import { PlayerProvider } from '../context/player/provider'

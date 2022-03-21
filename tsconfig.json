@@ -13,7 +13,13 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "downlevelIteration": true
+  },
+  "ts-node": {
+    "esm": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]

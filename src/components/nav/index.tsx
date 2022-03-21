@@ -29,7 +29,7 @@ const NavItemComponent: FunctionComponent<NavItemComponentProps> = ({ href, icon
 
 export const NavComponent: FunctionComponent = () => {
   return (
-    <nav className="bg-gray-100 border-right h-full px-6 py-4">
+    <nav className="bg-gray-100 border-r h-full px-6 py-4">
       <h1 className="text-2xl font-semibold flex items-center mb-4"><FiRadio className="text-red-500 mr-2 text-3xl" />电台</h1>
       <SearchComponent />
       <nav className="py-4">
