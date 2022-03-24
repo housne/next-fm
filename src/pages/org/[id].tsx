@@ -44,7 +44,7 @@ const OrganizationPage: NextPage<OrganizationPageProps> = ({ featuredRadios, rad
     return null
   }
   return (
-    <div className="px-12 py-4">
+    <div className="px-4 md:px-12 py-4">
       <Head>
         <title>{org.name}</title>
       </Head>

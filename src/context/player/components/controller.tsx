@@ -54,21 +54,21 @@ export const PlayerControllerComponent: FunctionComponent<PlayerControllerProps>
 
   return (
     <div className="flex items-center">
-      <button onClick={onPrev} className="text-xl"><MdSkipPrevious /></button>
+      <button onClick={onPrev} className="text-xl hidden sm:block"><MdSkipPrevious /></button>
       <PlayButton 
         radio={playingRadio as Radio} 
         loading={{size: 30, color: '#000', secondaryColor: '#ccc'}}
         classNames={{loadingPause: "text-xl"}}
-        className="text-3xl mx-5"
+        className="text-3xl md:mx-5"
       />
-      <button onClick={onNext} className="text-xl"><MdSkipNext /></button>
+      <button onClick={onNext} className="text-xl hidden sm:block"><MdSkipNext /></button>
       <button 
-        className={classNames("text-xl mx-5 relative", {"text-red-500": loopMode !== 'none'})}
+        className={classNames("text-xl mx-5 relative hidden md:block", {"text-red-500": loopMode !== 'none'})}
         onClick={changeLoopMode}
       >
           { loopMode === 'one' ? <MdOutlineRepeatOne /> : <MdOutlineRepeat />}
         </button>
-      <button className={classNames("text-xl", {'text-red-500': random})} onClick={toggleRandom}><MdShuffle /></button>
+      <button className={classNames("text-xl hidden md:block", {'text-red-500': random})} onClick={toggleRandom}><MdShuffle /></button>
     </div>
   )
 }

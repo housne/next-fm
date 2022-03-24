@@ -21,7 +21,7 @@ const VolumeSlider: FunctionComponent<VolumeSliderProps> = ({volume, setVolume})
     audio.volume = value / 100
   }, [setVolume, audio])
   return (
-    <div className="w-16 ml-2">
+    <div className="w-16 ml-2 hidden sm:block">
       <Slider
         value={volume}
         onChange={onChange}

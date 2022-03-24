@@ -45,9 +45,9 @@ export const PlayerComponent: FunctionComponent<PlayerComponentProps> = ({
     return null
   }
   return (
-    <div className="fixed flex items-center left-[260px] bottom-0 right-0 px-12 py-4 border-t bg-white" style={{boxShadow: '0 -5px 20px 2px rgba(0, 0, 0, 0.05)'}}>
+    <div className="fixed flex items-center left-0 lg:left-[260px] bottom-0 right-0 px-4 md:px-12 py-4 border-t bg-white" style={{boxShadow: '0 -5px 20px 2px rgba(0, 0, 0, 0.05)'}}>
       <PlayerControllerComponent {...props} />
-      <div className="flex-1 flex pl-12">
+      <div className="flex-1 flex sm:pl-12 pl-4">
         <div className="relative w-[38px] h-[38px] rounded-sm border">
           <Image src={playingRadio.thumbnail} alt={playingRadio.name} layout="fill" className="rounded-sm" />
         </div>

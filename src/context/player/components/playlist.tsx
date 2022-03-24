@@ -70,12 +70,15 @@ export const PlayListComponent: FunctionComponent<PlayListComponentProps> = ({ p
   return (
     <div className="relative flex" ref={containerRef}>
       <button onClick={toggle} className="text-xl"><MdQueueMusic /></button>
-      <div className="absolute bg-white w-[420px] bottom-14 right-0 shadow-md rounded-md border" style={{display: !isPlaylistOpen ? 'none' : ''}}>
+      <div 
+        className="sm:absolute fixed bg-white w-full top-[65px] sm:top-auto sm:w-[420px] bottom-[71px] flex flex-col sm:block sm:bottom-14 right-0 sm:shadow-md sm:rounded-md sm:border" 
+        style={{display: !isPlaylistOpen ? 'none' : ''}}
+      >
         <div className="flex items-center px-3 py-3 border-b">
           <h3 className="font-semibold flex-1">播放列表</h3>
           <button className="text-red-500" onClick={onClear}>清除</button>
         </div>
-        <div className="h-[530px] overflow-auto">
+        <div className="flex-1 sm:h-[530px] overflow-auto">
           <div>
             {
               playList.map(radio => <RadioComponent radio={radio} key={radio.id} onRemove={onRemove} />)

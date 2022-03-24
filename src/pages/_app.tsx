@@ -16,17 +16,17 @@ Router.events.on('routeChangeError', nprogress.done)
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-      <div className="flex h-screen">
+      <div className="h-screen lg:flex">
         <Head>
           <title>电台</title>
         </Head>
         <Toaster />
-        <div className="w-[260px]">
+        <div className="lg:w-[260px]">
           <NavComponent />
         </div>
         <PlayerProvider>
           <AuthContextProvider>
-            <div className="flex-1 overflow-y-auto pb-[90px]">
+            <div className="flex-1 overflow-y-auto pb-[90px] pt-[70px] lg:pt-0">
               <Component {...pageProps} />
             </div>
           </AuthContextProvider>

@@ -31,7 +31,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
 
 const Home: NextPage<HomeProps> = ({ featuredRadios, radioList }) => {
   return (
-    <div className="px-12 py-4">
+    <div className="px-4 md:px-12 py-4">
       <Head>
         <title>电台</title>
       </Head>

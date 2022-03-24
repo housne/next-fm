@@ -56,12 +56,12 @@ const RadioPage: NextPage<RadioPageProps> = ({ radio }) => {
     return null
   }
   return (
-    <div className="px-12 py-12">
-      <div className="flex">
-        <div className={classNames("relative w-[270px] h-[270px] rounded-md", styles.cover)}>
+    <div className="px-6 py-6 sm:px-12 sm:py-12">
+      <div className="sm:flex">
+        <div className={classNames("relative w-[270px] h-[270px] mx-auto md:mx-0 flex-shrink-0 rounded-md", styles.cover)}>
           <Image src={radio.thumbnail} layout="fill" objectFit="cover" alt={radio.name} className="rounded-md" />
         </div>
-        <div className="flex-1 pl-8 flex flex-col py-6">
+        <div className="flex-1 sm:pl-8 flex flex-col py-6">
           <div className="flex flex-col pt-6 flex-1">
             {
               radio.org && (
@@ -71,13 +71,15 @@ const RadioPage: NextPage<RadioPageProps> = ({ radio }) => {
               )
             }
             <h1 className="text-4xl font-semibold">{radio.name}</h1>
-            <div className="mt-4 text-red-500">
-            {
-              radio.genres.map(genre => <GenreLink genre={genre.genre} key={genre.genre_id} />)
-            }
-            </div>
-            <div className="mt-4">
-              <LikeComponent id={radio.id} />
+            <div className="flex mb-6 sm:block">
+              <div className="mt-4 text-red-500 flex-1 items-center">
+              {
+                radio.genres.map(genre => <GenreLink genre={genre.genre} key={genre.genre_id} />)
+              }
+              </div>
+              <div className="mt-4">
+                <LikeComponent id={radio.id} />
+              </div>
             </div>
           </div>
           <div className="flex">
@@ -87,7 +89,7 @@ const RadioPage: NextPage<RadioPageProps> = ({ radio }) => {
         </div>
       </div>
       {
-        radio.description && <div className="py-12 text-gray-500 prose" dangerouslySetInnerHTML={{__html: radio.description}} />
+        radio.description && <div className="py-6 sm:py-12 text-gray-500 prose" dangerouslySetInnerHTML={{__html: radio.description}} />
       }
     </div>
   )

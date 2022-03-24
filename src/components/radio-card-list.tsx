@@ -7,7 +7,12 @@ import { FeatureRadioComponent, RadioComponent } from './radio-card'
 const GridList: FunctionComponent<PropsWithChildren<{isGrid?: boolean}>> = ({ children, isGrid }) => {
   return (
     <div className="w-full">
-      <div className={classNames("overflow-auto flex flex-nowrap", isGrid ? "grid grid-cols-5 gap-4" : "flex flex-nowrap")}>
+      <div className={
+        classNames(
+          "overflow-auto flex flex-nowrap", 
+          isGrid ? "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-4" : "flex flex-nowrap"
+        )
+      }>
         {
           children
         }

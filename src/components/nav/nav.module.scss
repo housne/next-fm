@@ -1,0 +1,47 @@
+.menu {
+  height: 20px;
+  width: 20px;
+}
+.menu_icon {
+  display: block;
+  height: 2px;
+  position: absolute;
+  transition: top ease 0.3s 0.3s, transform ease 0.3s;
+  width: 100%;
+  left: 0;
+  top: 9px;
+  @apply bg-red-500;
+  &::after,
+  &::before {
+    content: "";
+    display: block;
+    height: 2px;
+    position: absolute;
+    transition: top ease 0.3s 0.3s, transform ease 0.3s;
+    width: 100%;
+    @apply bg-red-500;
+  }
+  &::before {
+    top: -6px;
+  }
+  &::after {
+    top: 6px;
+  }
+}
+
+.active {
+  .menu_icon {
+    background: transparent;
+    &::before {
+      transform: rotate(45deg);
+    }
+    &::after {
+      transform: rotate(-45deg);
+    }
+    &::before,
+    &::after {
+      top: 0;
+      transition: top ease 0.3s, transform ease 0.3s 0.3s;
+    }
+  }
+}

@@ -3,10 +3,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FunctionComponent, PropsWithChildren } from 'react'
-import { PlayButton } from '../components/play-button'
-import { PlayingIcon } from '../components/playing-icon'
-import { usePlayer } from '../context/player'
-import type { Radio, Genre } from '../types/radio'
+import { PlayButton } from '../play-button'
+import { PlayingIcon } from '../playing-icon'
+import { usePlayer } from '../../context/player'
+import type { Radio, Genre } from '../../types/radio'
+import styles from './radio-card.module.scss'
 
 type RadioComponentProps = {
   radio: Radio
@@ -44,7 +45,7 @@ export const FeatureRadioComponent: FunctionComponent<RadioComponentProps> = ({ 
   const router = useRouter()
   const gotoRadio = () => router.push(`/radio/${radio.id}`)
   return (
-    <div className="mr-6 my-4 flex-shrink-0 cursor-pointer" style={{width: isGrid ? "100%" : "calc(100% / 3  - 1rem)"}}>
+    <div className={classNames("mr-4 my-4 flex-shrink-0 cursor-pointer", styles.featured_card,  {[styles.grid]: isGrid})}>
       <div className="text-sm text-gray-500">
         {
           radio.genres.map(g => <GenreLink genre={g.genre} key={g.genre.id} />)
@@ -66,7 +67,7 @@ export const RadioComponent: FunctionComponent<RadioComponentProps> = ({radio, i
   const router = useRouter()
   const gotoRadio = () => router.push(`/radio/${radio.id}`)
   return (
-    <div className="mr-6 my-2 flex-shrink-0 cursor-pointer" style={{width: isGrid ? "100%" : "calc(100% / 5  - 1rem)"}} onClick={gotoRadio}>
+    <div className={classNames("mr-4 my-2 flex-shrink-0 cursor-pointer", styles.card, {[styles.grid]: isGrid})} onClick={gotoRadio}>
       <RadioPlayerComponent radio={radio}>
         <div className="aspect-w-1 aspect-h-1 relative rounded-md border shadow-sm w-full">
           <Image src={radio.thumbnail} alt={radio.name} layout="fill" objectFit="cover" className="rounded-md" />
