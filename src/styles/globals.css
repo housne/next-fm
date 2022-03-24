@@ -26,3 +26,11 @@ a {
 .rc-slider-handle:active {
   box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.5) !important;
 }
+
+#nprogress .bar {
+  @apply bg-red-500;
+}
+
+#nprogress .spinner-icon {
+  @apply border-t-red-500 border-l-red-500;
+}

@@ -1,62 +1,64 @@
-import { Prisma } from '@prisma/client'
-import { RegisterData } from '../../scheme/user'
-import { compare, hash } from '../crypto'
-import { deta } from '../deta'
-import { sendRegisterMail } from '../mail'
+import { z } from 'zod'
+import { Session } from '../../types/auth'
 import { prisma } from '../prisma'
+import { supabase } from '../supabase'
 
-const userRegisterDeta = deta.Base(`${process.env.NODE_ENV}_fm_user_veri`)
-
-
-export async function userRegister(data: RegisterData) {
-  const hashStr = await hash(data.password)
-  const user = await prisma.user.create({
-    data: {
-      ...data,
-      password: hashStr
-    }
+export async function userRegister(email: string, password: string) {
+  const s = await supabase.auth.signUp({
+    email,
+    password
   })
-  const record = await userRegisterDeta.put({user_id: user.id})
-  await sendRegisterMail(record?.key as string, user.email as string)
-  return user
-}
-
-export async function userActivation(key: string) {
-  const record = await userRegisterDeta.get(key)
-  if (!record) {
-    return false
-  }
-  const user_id = record.user_id as number
-  await prisma.user.update({
-    where: {id: user_id}, 
-    data: {active: true}
-  })
-  await userRegisterDeta.delete(key)
-  return true
-}
-
-export enum LOGIN_FAIL_REASON {
-  NOT_ACTIVATED,
-  WRONG_PASSWORD,
-  USER_NOT_EXISTS
-}
-
-export async function userLogin(input: Prisma.UserWhereUniqueInput, pwd: string) {
-  const user = await prisma.user.findUnique({where: input})
-  if (!user) {
-    return Promise.reject(LOGIN_FAIL_REASON.USER_NOT_EXISTS)
-  }
-  if (!user.active) {
-    return Promise.reject(LOGIN_FAIL_REASON.NOT_ACTIVATED)
-  }
-  try {
-    const result = await compare(pwd, user.password as string)
-    if (!result) {
-      return Promise.reject(LOGIN_FAIL_REASON.WRONG_PASSWORD)
+  if (!s.user || s.error) {
+    return {
+      ...s
     }
-  } catch (e) {
-    return Promise.reject(LOGIN_FAIL_REASON.WRONG_PASSWORD)
   }
-  const {password, ...result} = user
-  return result
+  const profile = await prisma.profile.create({data: {user_id: s.user.id}})
+  return {
+    ...s,
+    profile
+  }
+}
+
+export async function userLogin(email: string, password: string) {
+  const s = await supabase.auth.signIn({
+    email,
+    password
+  })
+  if (!s.user || s.error) {
+    return {
+      ...s
+    }
+  }
+  const profile = await prisma.profile.findUnique({where: { user_id: s.user.id }})
+  return {
+    ...s,
+    profile
+  }
+}
+
+export async function authorize(jwt: string): Promise<Session | null> {
+  const { user, error } = await supabase.auth.api.getUser(jwt)
+  if (!user || error) {
+    return null
+  }
+  const profile = await prisma.profile.findUnique({where: { user_id: user.id }})
+  return {
+    user,
+    profile,
+    access_token: jwt,
+    token_type: 'bearer'
+  }
+}
+
+export async function rendResetPasswordEmail(email: string) {
+  return await supabase.auth.api.resetPasswordForEmail(email, {
+    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/recovery`
+  })
+}
+
+export async function resetPassword(accessToken: string, password: string) {
+  return await supabase.auth.api.updateUserById(accessToken, {
+    password
+  })
 }

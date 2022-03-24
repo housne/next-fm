@@ -9,6 +9,7 @@ import styles from '../../styles/radio.module.scss';
 import classNames from "classnames";
 import Link from "next/link";
 import { GenreLink } from "../../components/radio-card";
+import { LikeComponent } from "../../components/like";
 
 type RadioPageProps = {
   radio?: Radio
@@ -74,6 +75,9 @@ const RadioPage: NextPage<RadioPageProps> = ({ radio }) => {
             {
               radio.genres.map(genre => <GenreLink genre={genre.genre} key={genre.genre_id} />)
             }
+            </div>
+            <div className="mt-4">
+              <LikeComponent id={radio.id} />
             </div>
           </div>
           <div className="flex">

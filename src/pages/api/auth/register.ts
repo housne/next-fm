@@ -16,6 +16,9 @@ export default async function handler(
   if (!result.success) {
     return res.status(400).json(result.error)
   }
-  const user = await userRegister(result.data)
+  const {user, error } = await userRegister(body.email, body.password)
+  if (error) {
+    return res.status(400).json({error})
+  }
   res.status(200).json(user)
 }

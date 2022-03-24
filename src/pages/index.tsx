@@ -1,6 +1,7 @@
 import type { GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
+import { PageHeaderComponent } from '../components/page-header'
 import { RadioCardListComponent } from '../components/radio-card-list'
 import { getFeaturedRadios, getRadiosByGenre, listAllGenre } from '../lib/api'
 import type { Radio, Genre } from '../types/radio'
@@ -34,7 +35,7 @@ const Home: NextPage<HomeProps> = ({ featuredRadios, radioList }) => {
       <Head>
         <title>电台</title>
       </Head>
-      <h1 className="text-3xl border-b py-4">浏览</h1>
+      <PageHeaderComponent title="浏览" />
       <RadioCardListComponent radios={featuredRadios} isFeatured />
       {
         radioList.map(genre => (

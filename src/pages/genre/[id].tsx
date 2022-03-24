@@ -1,5 +1,6 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
+import { PageHeaderComponent } from '../../components/page-header'
 import { RadioCardListComponent } from '../../components/radio-card-list'
 import { RadioListWithPagination } from '../../components/radio-list-with-pagination'
 import { NOT_FOUND } from '../../constants'
@@ -47,7 +48,7 @@ const GenrePage: NextPage<GenrePageProps> = ({ featuredRadios, radios, genre }) 
       <Head>
         <title>{genre.name}</title>
       </Head>
-      <h1 className="text-3xl border-b py-4">{genre.name}</h1>
+      <PageHeaderComponent title={genre.name} />
       {
         featuredRadios.length > 0 && (
           <div className="border-b mt-4">

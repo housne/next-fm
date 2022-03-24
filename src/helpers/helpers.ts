@@ -28,3 +28,10 @@ export function getFormData<T = any>(form: HTMLFormElement, scheme?: ZodSchema<T
   }
   return data
 }
+
+export function isID(id: string | number) {
+  if (typeof id === 'number') {
+    return id > 0
+  }
+  return /^[1-9](\d)*$/.test(id)
+}

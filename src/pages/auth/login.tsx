@@ -1,31 +1,30 @@
 import { NextPage } from "next";
-import { FormEventHandler } from "react";
-import { Input } from "../../components/input";
-import { getFormData } from "../../helpers/helpers";
-import { http } from "../../lib/http";
-import { LoginScheme } from "../../scheme/user";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { LoginFormComponent } from "../../components/auth/login";
+import { useAuth } from "../../context/auth";
 
 const UserLoginPage: NextPage = () => {
 
-  const login: FormEventHandler = async e => {
-    e.preventDefault()
-    const form = e.target as HTMLFormElement
-    const result = getFormData(form, LoginScheme)
-    if (!result.success) {
-      return
-    }
-    const user = await http.post('/auth/login', result.data)
-    console.log(user)
+  const { session } = useAuth()
+  const router = useRouter()
+
+  if (session) {
+    const { query: { next } } = router
+    const redirectURL = typeof next === 'string' ? next : '/'
+    router.replace(redirectURL)
   }
 
   return (
     <div className="px-12 py-12">
       <h1 className="text-3xl">用户登录</h1>
-      <form className="w-[320px] mt-6" onSubmit={login}>
-        <Input label="邮箱" name="email" />
-        <Input label="密码" name="password" type="password" />
-        <button className="px-6 py-1.5 bg-red-500 text-white rounded-md mt-2" type="submit">登录</button>
-      </form>
+      <div className="w-[360px] mt-6">
+        <LoginFormComponent />
+      </div>
+      <div className="my-6">
+        <Link href="/auth/register"><a className="text-red-500 mr-4">注册</a></Link>
+        <Link href="/auth/forgot"><a className="text-red-500 mr-4">忘记密码</a></Link>
+      </div>
     </div>
   )
 }
