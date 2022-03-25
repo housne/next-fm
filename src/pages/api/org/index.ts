@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { isAdminUser } from '../../../helpers/api'
 import { createOrg, listAllOrg } from '../../../lib/api'
 
 const createOrgHandler = async (
@@ -9,6 +10,10 @@ const createOrgHandler = async (
   const { name } = req.body
   if (!name || !name.toString().trim()) {
     return res.status(400).json({ error: 'error' })
+  }
+  const isAdmin = await isAdminUser(req)
+  if (!isAdmin) { 
+    return res.status(401).json({ error: 'unauthorized' }) 
   }
   const org = await createOrg(name)
   return res.status(200).json(org)

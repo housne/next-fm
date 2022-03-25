@@ -76,17 +76,21 @@ export const PlayerProvider: FunctionComponent<PropsWithChildren<{}>> = ({ child
     setPlayingRadio(radio)
     addToPlayList(radio, true)
     audio.load()
-    if (!radio.is_hls) {
-      return audio.play()
-    }
-    return new Promise<void>((resolve, reject) => {
-      hlsRef.current = new Hls()
-      hlsRef.current.attachMedia(audio)
-      hlsRef.current.on(Hls.Events.MEDIA_ATTACHED, () => {
-        hlsRef.current?.loadSource(radio.stream_url)
-        audio.play().then(resolve).catch(reject)
+    if (radio.is_hls) {
+      if (audio.canPlayType('application/vnd.apple.mpegurl')) {
+        audio.src = radio.stream_url
+        return audio.play()
+      }
+      return new Promise<void>((resolve, reject) => {
+        hlsRef.current = new Hls()
+        hlsRef.current.attachMedia(audio)
+        hlsRef.current.on(Hls.Events.MEDIA_ATTACHED, () => {
+          hlsRef.current?.loadSource(radio.stream_url)
+          audio.play().then(resolve).catch(reject)
+        })
       })
-    })
+    }
+    return audio.play()
   }, [addToPlayList])
 
   const pause = useCallback(() => {

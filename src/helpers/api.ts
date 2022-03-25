@@ -18,3 +18,15 @@ export async function getUserFromRequest(req: NextApiRequest): Promise<User | nu
   const { user } = await supabase.auth.api.getUser(jwt)
   return user
 }
+
+export async function isAdminUser(req: NextApiRequest): Promise<boolean> {
+  const adminUserEmail = process.env.ADMIN_USER_EMAIL
+  if (!adminUserEmail) {
+    return false
+  }
+  const user = await getUserFromRequest(req)
+  if (!user) {
+    return false
+  }
+  return user.email === adminUserEmail
+}

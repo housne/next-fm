@@ -3,16 +3,20 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { CreateRadio } from '../../../scheme/create-radio';
 import { createRadio, listRadios } from '../../../lib/api';
 import { Prisma } from '@prisma/client';
+import { isAdminUser } from '../../../helpers/api';
 
 const createHandler = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
   const { body } = req
-  console.log(body.constructor)
   const data = CreateRadio.safeParse(body)
   if (!data.success) {
     return res.status(400).json(data.error)
+  }
+  const isAdmin = await isAdminUser(req)
+  if (!isAdmin) { 
+    return res.status(401).json({ error: 'unauthorized' }) 
   }
   const radio = await createRadio(body)
   res.status(200).json(radio)
