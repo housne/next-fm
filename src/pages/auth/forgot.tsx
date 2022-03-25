@@ -24,13 +24,15 @@ const ForgotPage: NextPage = () => {
   }
 
   return (
-    <div className="px-12 py-12">
-      <h1 className="text-3xl">找回密码</h1>
-      <div className="w-[360px] mt-6">
-        <form onSubmit={forgotHandler}>
-        <Input label="邮箱" name="email" />
-        <button className="px-6 py-1.5 bg-red-500 text-white rounded-md mt-2" type="submit">找回密码</button>
-      </form>
+    <div className="px-4 sm:px-12 py-12">
+      <div className="max-w-[360px] mx-auto lg:mx-0">
+        <h1 className="text-3xl">找回密码</h1>
+        <div className="mt-6">
+          <form onSubmit={forgotHandler}>
+          <Input label="邮箱" name="email" />
+          <button className="px-6 py-1.5 bg-red-500 text-white rounded-md mt-2" type="submit">找回密码</button>
+        </form>
+        </div>
       </div>
     </div>
   )

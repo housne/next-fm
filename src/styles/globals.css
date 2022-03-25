@@ -34,3 +34,11 @@ a {
 #nprogress .spinner-icon {
   @apply border-t-red-500 border-l-red-500;
 }
+
+#nprogress .spinner-icon-inner {
+  @apply bg-red-500;
+}
+
+#nprogress .peg {
+  @apply shadow-md shadow-red-500/50;
+}

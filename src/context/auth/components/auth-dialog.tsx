@@ -48,16 +48,16 @@ const AuthDialogRender: ForwardRefRenderFunction<AuthDialogRef, AuthDialogProps>
   ]
 
   return (
-    <div className={classNames("fixed h-screen w-screen top-0 left-0 z-10", isOpen ? "block" : "hidden")}>
+    <div className={classNames("fixed h-screen w-screen top-0 left-0 z-50", isOpen ? "block" : "hidden")}>
       <div className="absolute w-full h-full top-0 left-0 bg-black bg-opacity-70" onClick={close} />
-      <div className="relative z-10 max-w-[420px] mx-auto bg-white mt-[100px] rounded-md shadow-lg">
-        <div className="px-6 border-b text-center">
+      <div className="relative z-10 max-w-[420px] mx-4 sm:mx-auto bg-white mt-[100px] rounded-2xl shadow-lg">
+        <div className="py-6 pb-0 text-center">
           {
             tabs.map((tab) => (
               <button
                 className={
-                  classNames("py-2.5 mr-6 relative", {
-                  "text-red-500 after:border-2 after:border-b after:border-red-500 after:absolute after:left-0 after:bottom-[-1px] after:w-full": showTab === tab.tab
+                  classNames("py-1.5 relative px-6 border text-sm text-red-500 border-red-500 rounded-md first:rounded-r-none last:rounded-l-none ml-[-1px]", {
+                  "bg-red-500 text-white": showTab === tab.tab
                 })}
                 key={tab.tab} 
                 onClick={() => setShowTab(tab.tab)}

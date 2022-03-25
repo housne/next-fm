@@ -48,14 +48,16 @@ const RecoveryPage: NextPage = () => {
   }, [])
 
   return (
-    <div className="px-12 py-12">
+    <div className="px-4 sm:px-12 py-12">
+      <div className="max-w-[360px] mx-auto lg:mx-0">
       <h1 className="text-3xl">重设密码</h1>
-      <div className="w-[360px] mt-6">
+      <div className="mt-6">
         <form onSubmit={recoveryHandler}>
         <Input label="新密码" name="password" type="password" />
         <Input label="确认密码" name="password1" type="password" />
         <button className="px-6 py-1.5 bg-red-500 text-white rounded-md mt-2" type="submit">重设密码</button>
       </form>
+      </div>
       </div>
     </div>
   )

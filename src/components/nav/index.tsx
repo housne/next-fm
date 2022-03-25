@@ -38,7 +38,7 @@ export const NavComponent: FunctionComponent = () => {
   return (
     <nav className="lg:h-full lg:relative bg-white lg:bg-gray-100 lg:border-r fixed top-0 left-0 w-full z-40">
       <div className={classNames("flex relative px-4 py-4 items-center z-40 border-b lg:border-b-0", {"border-b-0": showMenu})}>
-        <h1 className="text-2xl font-semibold flex-1">
+        <h1 className="text-2xl font-semibold flex-1 flex">
           <Link href="/" passHref><a className="inline-flex items-center"><FiRadio className="text-red-500 mr-2 text-3xl" />电台</a></Link>
         </h1>
         <button onClick={toggle} className={classNames("lg:hidden relative", styles.menu, {[styles.active]: showMenu})}>
