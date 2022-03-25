@@ -40,6 +40,7 @@ export const AuthContextProvider: FunctionComponent<PropsWithChildren<{}>> = ({ 
     if (!session) {
       return Promise.reject()
     }
+    localStorage.setItem('session', JSON.stringify(session))
     setSession(session)
     return session
   }, [oauthLogin, passwordLogin])
@@ -88,7 +89,6 @@ export const AuthContextProvider: FunctionComponent<PropsWithChildren<{}>> = ({ 
       localStorage.removeItem('session')
       return
     }
-    localStorage.setItem('session', JSON.stringify(session))
   }, [session])
 
   useEffect(() => {

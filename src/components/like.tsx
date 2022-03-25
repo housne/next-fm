@@ -1,18 +1,26 @@
 import { FunctionComponent, useEffect, useRef, useState } from "react";
 import { http } from "../lib/http";
 import { IoIosHeartEmpty, IoIosHeart } from 'react-icons/io'
+import { useAuth } from "../context/auth";
 
 export const LikeComponent: FunctionComponent<{id: number}> = ({ id }) => {
   const [liked, setLiked] = useState(false)
   const isProcessingRef = useRef(false)
+  const { session, openAuthDialog } = useAuth()
 
   useEffect(() => {
+    if (!session) {
+      return
+    }
     http
       .get<{liked: boolean}>('/like', { query: { id: id.toString()}})
       .then(({liked}) => setLiked(liked))
-  }, [id])
+  }, [id, session])
 
   const toggleLike = async () => {
+    if (!session) {
+      return openAuthDialog()
+    }
     if (isProcessingRef.current) {
       return
     }
